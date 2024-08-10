@@ -1,3 +1,7 @@
+"""
+The betting model is tasked with one very important decison, how much to bet given the current count of cards
+"""
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
