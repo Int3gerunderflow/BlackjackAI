@@ -9,6 +9,9 @@ suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
 card_values = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
 
+#global variable to keep track of the count
+card_count = 0
+
 # Function to create and shuffle the deck
 def create_deck():
     deck = []
@@ -43,11 +46,35 @@ def display_hand(hand, name):
         print(f"  {card[0]} of {card[1]}")
     print(f"Total value: {calculate_hand_value(hand)}\n")
 
-#global variable to keep track of the count
-card_count = 0
+
 #card counting mechanism
-def play_game(new_cards):
-    print("yes")
+#cards will be counting per the Omega II system
+def count_cards(new_cards):
+    global card_count
+    for card in new_cards:
+        match card_values[card[0]]:
+            case 2: 
+                card_count += 1
+            case 3: 
+                card_count += 1
+            case 7: 
+                card_count += 1
+            case 4: 
+                card_count += 2
+            case 5: 
+                card_count += 2
+            case 6: 
+                card_count += 2  
+            case 8: 
+                card_count += 0
+            case 9: 
+                card_count -= 1 
+            case 10: 
+                card_count -= 2
+            case 11: 
+                card_count -= 2
+            case _:
+                continue
 
 
 # Main game function
@@ -62,16 +89,25 @@ def play_blackjack():
         display_hand(player_hand, 'Player')
         display_hand(dealer_hand[:1], 'Dealer')
 
+        #each time any new cards are shown make note of them in the count
+        count_cards(player_hand + dealer_hand[:1])
+
         while calculate_hand_value(player_hand) < 21:
             action = input("Do you want to [h]it or [s]tand? ").lower()
             if action == 'h':
-                player_hand.append(deck.pop())
+                new_card = deck.pop()
+                count_cards([new_card])
+                player_hand.append(new_card)
                 display_hand(player_hand, 'Player')
             else:
                 break
 
+        #compensate for the fact that first card is hidden
+        count_cards([dealer_hand[1]])
         while calculate_hand_value(dealer_hand) < 18:
-            dealer_hand.append(deck.pop())
+            new_card = deck.pop()
+            count_cards([new_card])
+            dealer_hand.append(new_card)
 
         display_hand(dealer_hand, 'Dealer')
 
