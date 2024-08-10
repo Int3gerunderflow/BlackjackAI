@@ -1,2 +1,2 @@
 # BlackjackAI
-Multi-faceted, scaleable, artificially-inteligent, casino-scamming technology
+Multi-faceted, scaleable, artificially-intelligent, casino-scamming technology
