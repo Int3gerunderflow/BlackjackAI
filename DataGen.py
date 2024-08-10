@@ -43,39 +43,54 @@ def display_hand(hand, name):
         print(f"  {card[0]} of {card[1]}")
     print(f"Total value: {calculate_hand_value(hand)}\n")
 
+#global variable to keep track of the count
+card_count = 0
+#card counting mechanism
+def play_game(new_cards):
+    print("yes")
+
+
 # Main game function
 def play_blackjack():
     deck = create_deck()
-    player_hand = [deck.pop(), deck.pop()]
-    dealer_hand = [deck.pop(), deck.pop()]
+    
+    wantToPlay = True
+    while wantToPlay:
+        player_hand = [deck.pop(), deck.pop()]
+        dealer_hand = [deck.pop(), deck.pop()]
 
-    display_hand(player_hand, 'Player')
-    display_hand(dealer_hand[:1], 'Dealer')
+        display_hand(player_hand, 'Player')
+        display_hand(dealer_hand[:1], 'Dealer')
 
-    while calculate_hand_value(player_hand) < 21:
-        action = input("Do you want to [h]it or [s]tand? ").lower()
-        if action == 'h':
-            player_hand.append(deck.pop())
-            display_hand(player_hand, 'Player')
+        while calculate_hand_value(player_hand) < 21:
+            action = input("Do you want to [h]it or [s]tand? ").lower()
+            if action == 'h':
+                player_hand.append(deck.pop())
+                display_hand(player_hand, 'Player')
+            else:
+                break
+
+        while calculate_hand_value(dealer_hand) < 18:
+            dealer_hand.append(deck.pop())
+
+        display_hand(dealer_hand, 'Dealer')
+
+        player_value = calculate_hand_value(player_hand)
+        dealer_value = calculate_hand_value(dealer_hand)
+
+        if player_value > 21:
+            print("Player busts! Dealer wins.")
+        elif dealer_value > 21 or player_value > dealer_value:
+            print("Player wins!")
+        elif player_value < dealer_value:
+            print("Dealer wins!")
         else:
-            break
+            print("It's a tie!")
 
-    while calculate_hand_value(dealer_hand) < 18:
-        dealer_hand.append(deck.pop())
+        playAgain = input("Do you want to play again (y/n)? ").lower()
 
-    display_hand(dealer_hand, 'Dealer')
-
-    player_value = calculate_hand_value(player_hand)
-    dealer_value = calculate_hand_value(dealer_hand)
-
-    if player_value > 21:
-        print("Player busts! Dealer wins.")
-    elif dealer_value > 21 or player_value > dealer_value:
-        print("Player wins!")
-    elif player_value < dealer_value:
-        print("Dealer wins!")
-    else:
-        print("It's a tie!")
+        if playAgain != 'y':
+            wantToPlay = False
 
 if __name__ == "__main__":
     play_blackjack()
