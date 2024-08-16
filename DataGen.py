@@ -11,6 +11,7 @@ card_values = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '
 
 #global variable to keep track of the count
 card_count = 0
+ace_count = 0
 
 # Function to create and shuffle the deck
 def create_deck():
@@ -78,6 +79,24 @@ def count_cards(new_cards):
 
 
 # Main game function
+def hit_or_stand(hand, dealer):
+    print(dealer[0][0] + "njganjadfadgoj")
+
+    if (calculate_hand_value(hand) <= 17 and ace_count != 0): return "h"
+    elif(ace_count != 0 and calculate_hand_value(hand) == 18):
+        if (int(dealer[0][0]) < 9): return "s"
+        else: return "h"
+    elif (calculate_hand_value(hand) <= 11): return "h"
+    elif (calculate_hand_value(hand) ==12):
+        if (int(dealer[0][0]) ==4 or int(dealer[0][0]) == 5 or int(dealer[0][0]) ==6): return "s"
+        else: return "h"
+    elif (calculate_hand_value(hand) >= 13 and calculate_hand_value(hand) <=16):
+        if (dealer[0][0] != "Ace" and int(dealer[0][0]) <= 6): return "s"
+        else: return "h"
+    else: "s"
+
+
+
 def play_blackjack():
     deck = create_deck()
     
@@ -93,7 +112,10 @@ def play_blackjack():
         count_cards(player_hand + dealer_hand[:1])
 
         while calculate_hand_value(player_hand) < 21:
-            action = input("Do you want to [h]it or [s]tand? ").lower()
+            #decide whther to hit or stand
+            action = hit_or_stand(player_hand, dealer_hand)
+
+            #action = input("Do you want to [h]it or [s]tand? ").lower()
             if action == 'h':
                 new_card = deck.pop()
                 count_cards([new_card])
